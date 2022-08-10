@@ -1,5 +1,7 @@
 import { initializeApp} from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
+
+import { getAuth, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider} from 'firebase/auth';
+
 import {
     getFirestore,
     doc,
@@ -7,6 +9,8 @@ import {
     setDoc
 
 } from 'firebase/firestore';
+
+//Security by adding a layer in between third party services and this application
 
 const firebaseConfig = {
     apiKey: "AIzaSyDvJT4MER2JVWx4gpRLDUMI9W-fqbhUs1A",
@@ -32,6 +36,8 @@ export const signInWithGooglePopup = () => signInWithPopup(auth,googleProvider);
 export const db = getFirestore();
 
 export const createUserDocumentFromAuth = async (userAuth)=> {
+    if(!userAuth) return; //Make sure we receive it!
+
     const userDocRef = doc(db,'users', userAuth.uid)
     const userSnapshot = await getDoc(userDocRef);
 
@@ -50,3 +56,10 @@ export const createUserDocumentFromAuth = async (userAuth)=> {
     console.log(userSnapshot.exists());
     return userDocRef;
 };
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return; //Security somewhat.
+
+   return await createUserWithEmailAndPassword(auth, email, password)//make sure to use the right method!
+
+}
