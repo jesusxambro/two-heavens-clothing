@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   createUserDocumentFromAuth,
   signInWithGooglePopup,
+  signInAuthUserWithEmailAndPassword,
 } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component";
 
@@ -31,6 +32,8 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
+      const response = await signInAuthUserWithEmailAndPassword(email,password);
+      console.log(response)
       resetFormFields();
 
       // console.log(response);
